@@ -1,4 +1,4 @@
-import { prismaCilent } from "../../server.js";
+import { prismaClient } from "../../server.js";
 import pkg from "bcryptjs";
 import jwt from "jsonwebtoken";
 import {
@@ -6,14 +6,14 @@ import {
   HttpException,
   BadRequestException,
 } from "../exceptions/exceptions.js";
-import { zodUserSchema } from "../schema/zodUserSchema.js";
+import { zodUserSchema } from "../schema/zodValidationSchema.js";
 const { compareSync, hashSync } = pkg;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const signup = async (req, res, next) => {
   const parsedData = zodUserSchema.parse(req.body);
   const { PhoneNumber, password } = parsedData;
 
-  const existingUser = await prismaCilent.user.findFirst({
+  const existingUser = await prismaClient.user.findFirst({
     where: { PhoneNumber },
   });
 
@@ -26,7 +26,7 @@ export const signup = async (req, res, next) => {
     );
   }
 
-  const newUser = await prismaCilent.user.create({
+  const newUser = await prismaClient.user.create({
     data: {
       PhoneNumber,
       password: hashSync(password, 10),
@@ -57,7 +57,7 @@ export const login = async (req, res, next) => {
     );
   }
 
-  const user = await prismaCilent.user.findFirst({
+  const user = await prismaClient.user.findFirst({
     where: { PhoneNumber },
   });
 

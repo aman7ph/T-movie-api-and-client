@@ -17,3 +17,52 @@ updatedAt DateTime @default(now())
 
 @@map("users")
 }
+
+model Movie {
+  id          Int      @id @default(autoincrement())
+  title       String
+  duration    Int  
+  description String
+  status      String @default("active")
+  channelId   Int
+  channel     Channel  @relation(fields: [channelId], references: [id])
+  typeId      Int
+  type        Type     @relation(fields: [typeId], references: [id])
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  videoUrl    String
+
+  @@map("movies")
+
+}
+
+model Channel {
+  id    Int     @id @default(autoincrement())
+  name  String
+  status      String @default("active")
+  movies Movie[]
+
+  @@map("channels")
+
+}
+
+model Type {
+  id    Int     @id @default(autoincrement())
+  name  String
+  movies Movie[]
+
+  @@map("types")
+
+}
+
+model Category {
+  id    Int     @id @default(autoincrement())
+  name  String
+  movies Movie[]
+
+  @@map("categorys")
+
+}
+
+
+//npx prisma migrate dev --name CreateAllTables

@@ -9,11 +9,12 @@ export class HttpException extends Error {
 }
 
 export const ErrorCode = {
-  USER_NOT_FOUND: 101,
-  USER_ALREADY_EXISTS: 102,
-  INCORRECT_PASSWORD: 103,
-  UNPROCESSABLE_ENTITY: 422,
-  INTERNAL_EXCEPTION: 500,
+  USER_NOT_FOUND: 1001,
+  USER_ALREADY_EXISTS: 1002,
+  INCORRECT_PASSWORD: 1003,
+  UNPROCESSABLE_ENTITY: 4220,
+  INTERNAL_EXCEPTION: 5000,
+  UNAUTHORIZED: 4001,
 };
 
 export class BadRequestException extends HttpException {
@@ -58,5 +59,11 @@ export class NotFoundException extends HttpException {
       404,
       "The requested resource could not be found. Please check the URL and try again."
     );
+  }
+}
+
+export class UnauthorizedException extends HttpException {
+  constructor(message, errors, errorCode) {
+    super(message, errorCode, 401, "Authorization failed.");
   }
 }
